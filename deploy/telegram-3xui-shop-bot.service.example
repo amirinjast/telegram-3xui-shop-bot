@@ -1,0 +1,15 @@
+[Unit]
+Description=Telegram 3x-ui Shop Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/telegram-3xui-shop-bot
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/path/to/telegram-3xui-shop-bot/.venv/bin/python /path/to/telegram-3xui-shop-bot/run.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
