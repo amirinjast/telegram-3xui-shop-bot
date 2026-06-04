@@ -66,6 +66,36 @@ class NowPaymentsClient:
             raise NowPaymentsError(f"NOWPayments HTTP {resp.status_code}: {resp.text[:500]}")
         return resp.json()
 
+    async def get_payment_status(self, payment_id: str) -> dict[str, Any]:
+        if not self.enabled:
+            raise NowPaymentsError("NOWPayments is disabled or API key is missing")
+        if not payment_id:
+            raise NowPaymentsError("NOWPayments payment_id is missing")
+
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.get(f"{self.base_url}/payment/{payment_id}", headers=self._headers())
+        if resp.status_code >= 400:
+            raise NowPaymentsError(f"NOWPayments HTTP {resp.status_code}: {resp.text[:500]}")
+        return resp.json()
+
+    async def trusted_ipn_payload(self, payload: dict[str, Any], received_sig: str | None) -> dict[str, Any]:
+        if self.settings.nowpayments_ipn_secret:
+            if not self.verify_ipn(payload, received_sig):
+                raise NowPaymentsError("Invalid NOWPayments IPN signature")
+            return payload
+
+        payment_id = str(payload.get("payment_id") or payload.get("id") or "")
+        if not payment_id:
+            raise NowPaymentsError("NOWPayments IPN payload has no payment_id")
+
+        trusted_payload = await self.get_payment_status(payment_id)
+
+        for key in ("order_id", "invoice_id"):
+            if not trusted_payload.get(key) and payload.get(key):
+                trusted_payload[key] = payload[key]
+
+        return trusted_payload
+
     def verify_ipn(self, payload: dict[str, Any], received_sig: str | None) -> bool:
         if not received_sig or not self.settings.nowpayments_ipn_secret:
             return False
