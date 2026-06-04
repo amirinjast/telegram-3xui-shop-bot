@@ -14,6 +14,7 @@ class Settings(BaseSettings):
 
     bot_token: str = Field(..., alias="BOT_TOKEN")
     admin_ids_raw: str = Field("", alias="ADMIN_IDS")
+    allow_first_admin_claim: bool = Field(False, alias="ALLOW_FIRST_ADMIN_CLAIM")
     internal_api_key: str = Field("", alias="INTERNAL_API_KEY")
 
     public_base_url: str = Field("http://localhost:8080", alias="PUBLIC_BASE_URL")
