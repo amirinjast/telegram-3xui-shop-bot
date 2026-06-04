@@ -9,7 +9,7 @@ from sqlalchemy import select
 from app.config import get_settings
 from app.db import session_scope
 from app.models import Order, Payment, Plan, User
-from app.payments.nowpayments import NowPaymentsClient
+from app.payments.nowpayments import NowPaymentsClient, NowPaymentsError
 from app.pricing import toman_to_usd
 from app.services.billing import credit_wallet, mark_nowpayments_success
 
@@ -50,10 +50,15 @@ def create_app(bot=None) -> FastAPI:
         payload = await request.json()
         sig = request.headers.get("x-nowpayments-sig")
         client = NowPaymentsClient()
-        if not client.verify_ipn(payload, sig):
-            raise HTTPException(status_code=401, detail="Invalid IPN signature")
+        try:
+            trusted_payload = await client.trusted_ipn_payload(payload, sig)
+        except NowPaymentsError as exc:
+            detail = str(exc)
+            status_code = 401 if "signature" in detail.lower() else 400
+            raise HTTPException(status_code=status_code, detail=detail) from exc
+
         async with session_scope() as session:
-            result = await mark_nowpayments_success(session, payload)
+            result = await mark_nowpayments_success(session, trusted_payload)
             if result.changed and result.order and bot:
                 user = await session.get(User, result.order.user_id)
                 if user:
