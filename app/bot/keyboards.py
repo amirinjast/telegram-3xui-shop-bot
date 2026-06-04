@@ -12,11 +12,9 @@ def main_menu(is_admin: bool = False) -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="💳 شارژ حساب", callback_data="menu:topup"),
         ],
         [
-            InlineKeyboardButton(text="👤 حساب من", callback_data="menu:account"),
             InlineKeyboardButton(text="📦 سرویس‌های من", callback_data="menu:services"),
+            InlineKeyboardButton(text="👤 حساب من", callback_data="menu:account"),
         ],
-        [InlineKeyboardButton(text="📚 آموزش اتصال", callback_data="menu:helps")],
-        [InlineKeyboardButton(text="📞 پشتیبانی", callback_data="menu:support")],
     ]
     if is_admin:
         rows.append([InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")])
@@ -43,8 +41,8 @@ def pay_methods_keyboard(order_id: int, *, allow_wallet: bool = True) -> InlineK
     rows: list[list[InlineKeyboardButton]] = []
     if allow_wallet:
         rows.append([InlineKeyboardButton(text="💰 پرداخت از کیف پول", callback_data=f"pay_wallet:{order_id}")])
-    rows.append([InlineKeyboardButton(text="💸 پرداخت مستقیم NOWPayments", callback_data=f"pay_now:{order_id}")])
-    rows.append([InlineKeyboardButton(text="💳 کارت‌به‌کارت و ارسال رسید", callback_data=f"pay_manual:{order_id}")])
+    rows.append([InlineKeyboardButton(text="💸 پرداخت NOWPayments", callback_data=f"pay_now:{order_id}")])
+    rows.append([InlineKeyboardButton(text="💳 کارت‌به‌کارت", callback_data=f"pay_manual:{order_id}")])
     rows.append([InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
@@ -69,7 +67,7 @@ def topup_keyboard() -> InlineKeyboardMarkup:
 def topup_method_keyboard(amount_toman: int) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="💸 پرداخت کریپتو NOWPayments", callback_data=f"create_now:{amount_toman}")],
+            [InlineKeyboardButton(text="💸 NOWPayments", callback_data=f"create_now:{amount_toman}")],
             [InlineKeyboardButton(text="💳 کارت‌به‌کارت", callback_data=f"manual_topup:{amount_toman}")],
             [InlineKeyboardButton(text="🔙 تغییر مبلغ", callback_data="menu:topup")],
             [InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")],
@@ -99,9 +97,7 @@ def services_keyboard(services) -> InlineKeyboardMarkup:
 def service_detail_keyboard(service_id: int, is_admin: bool = False) -> InlineKeyboardMarkup:
     rows = [
         [InlineKeyboardButton(text="🔗 نمایش لینک", callback_data=f"svc_link:{service_id}")],
-        [InlineKeyboardButton(text="📷 QR Code", callback_data=f"svc_qr:{service_id}")],
-        [InlineKeyboardButton(text="🔁 تمدید همین پلن", callback_data=f"renew_same:{service_id}")],
-        [InlineKeyboardButton(text="📚 آموزش اتصال", callback_data="menu:helps")],
+        [InlineKeyboardButton(text="🔁 تمدید", callback_data=f"renew_same:{service_id}")],
         [InlineKeyboardButton(text="📦 سرویس‌های من", callback_data="menu:services")],
         [InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")],
     ]
@@ -113,11 +109,6 @@ def service_detail_keyboard(service_id: int, is_admin: bool = False) -> InlineKe
 def help_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [
-                InlineKeyboardButton(text="اندروید", callback_data="help:ANDROID_HELP"),
-                InlineKeyboardButton(text="آیفون", callback_data="help:IOS_HELP"),
-            ],
-            [InlineKeyboardButton(text="ویندوز", callback_data="help:WINDOWS_HELP")],
             [InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")],
         ]
     )
@@ -128,32 +119,16 @@ def help_keyboard() -> InlineKeyboardMarkup:
 def admin_panel_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="⚙️ تنظیمات بخش‌بندی‌شده", callback_data="adm_settings_hub")],
-            [
-                InlineKeyboardButton(text="🔌 3x-ui و اتصال", callback_data="adm_cfg_xui"),
-                InlineKeyboardButton(text="🌐 اینباندها", callback_data="adm_inbounds"),
-            ],
-            [
-                InlineKeyboardButton(text="💳 پرداخت‌ها", callback_data="adm_cfg_payment"),
-                InlineKeyboardButton(text="🛒 فروش و پیش‌فرض‌ها", callback_data="adm_cfg_sales"),
-            ],
+            [InlineKeyboardButton(text="🔌 اتصال 3x-ui", callback_data="adm_cfg_xui")],
+            [InlineKeyboardButton(text="🌐 اینباندها", callback_data="adm_inbounds")],
             [
                 InlineKeyboardButton(text="📦 پلن‌ها", callback_data="adm_plans"),
                 InlineKeyboardButton(text="➕ افزودن پلن", callback_data="adm_add_plan"),
             ],
-            [
-                InlineKeyboardButton(text="👥 کاربران", callback_data="adm_users"),
-                InlineKeyboardButton(text="🧑‍💼 ادمین/نماینده", callback_data="adm_roles"),
-            ],
-            [
-                InlineKeyboardButton(text="🧾 رسیدها", callback_data="adm_pending_receipts"),
-                InlineKeyboardButton(text="📊 گزارش فروش", callback_data="adm_report"),
-            ],
-            [
-                InlineKeyboardButton(text="📝 متن‌ها", callback_data="adm_texts"),
-                InlineKeyboardButton(text="📤 بکاپ دیتابیس", callback_data="adm_backup"),
-            ],
-            [InlineKeyboardButton(text="🚀 راه‌اندازی مرحله‌ای قدیمی", callback_data="adm_setup")],
+            [InlineKeyboardButton(text="💳 پرداخت‌ها", callback_data="adm_cfg_payment")],
+            [InlineKeyboardButton(text="🧾 رسیدها", callback_data="adm_pending_receipts")],
+            [InlineKeyboardButton(text="👥 کاربران", callback_data="adm_users")],
+            [InlineKeyboardButton(text="📤 بکاپ دیتابیس", callback_data="adm_backup")],
             [InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")],
         ]
     )
@@ -162,7 +137,7 @@ def admin_panel_keyboard() -> InlineKeyboardMarkup:
 def admin_back_keyboard(section: str | None = None) -> InlineKeyboardMarkup:
     rows: list[list[InlineKeyboardButton]] = []
     if section:
-        rows.append([InlineKeyboardButton(text="🔙 برگشت به همین بخش", callback_data=section)])
+        rows.append([InlineKeyboardButton(text="🔙 برگشت", callback_data=section)])
     rows.append([InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")])
     rows.append([InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
@@ -171,19 +146,9 @@ def admin_back_keyboard(section: str | None = None) -> InlineKeyboardMarkup:
 def settings_hub_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [
-                InlineKeyboardButton(text="🔌 اتصال 3x-ui", callback_data="adm_cfg_xui"),
-                InlineKeyboardButton(text="🌐 اینباندها", callback_data="adm_inbounds"),
-            ],
-            [
-                InlineKeyboardButton(text="💳 پرداخت‌ها", callback_data="adm_cfg_payment"),
-                InlineKeyboardButton(text="🛒 فروش", callback_data="adm_cfg_sales"),
-            ],
-            [
-                InlineKeyboardButton(text="📝 متن‌ها", callback_data="adm_texts"),
-                InlineKeyboardButton(text="🧑‍💼 نقش‌ها", callback_data="adm_roles"),
-            ],
-            [InlineKeyboardButton(text="📄 نمایش خلاصه تنظیمات", callback_data="adm_settings")],
+            [InlineKeyboardButton(text="🔌 اتصال 3x-ui", callback_data="adm_cfg_xui")],
+            [InlineKeyboardButton(text="💳 پرداخت‌ها", callback_data="adm_cfg_payment")],
+            [InlineKeyboardButton(text="🛒 فروش", callback_data="adm_cfg_sales")],
             [InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")],
         ]
     )
@@ -192,19 +157,9 @@ def settings_hub_keyboard() -> InlineKeyboardMarkup:
 def config_section_keyboard(section: str, items: list[tuple[str, str]], *, tests: bool = False) -> InlineKeyboardMarkup:
     rows = [[InlineKeyboardButton(text=label, callback_data=f"adm_edit:{section}:{key}")] for key, label in items]
     if section == "xui":
-        rows.append([
-            InlineKeyboardButton(text="🔌 تست 3x-ui", callback_data="adm_test_xui"),
-            InlineKeyboardButton(text="📥 دریافت اینباند از پنل", callback_data="adm_pull_inbounds"),
-        ])
+        rows.append([InlineKeyboardButton(text="🔌 تست و دریافت اینباند", callback_data="adm_pull_inbounds")])
     if section == "payment":
         rows.append([InlineKeyboardButton(text="💸 تست NOWPayments", callback_data="adm_test_now")])
-        rows.append([
-            InlineKeyboardButton(text="روشن/خاموش NOWPayments", callback_data="adm_toggle:NOWPAYMENTS_ENABLED:adm_cfg_payment"),
-            InlineKeyboardButton(text="روشن/خاموش کارت", callback_data="adm_toggle:MANUAL_PAYMENT_ENABLED:adm_cfg_payment"),
-        ])
-    if section == "sales":
-        rows.append([InlineKeyboardButton(text="روشن/خاموش تست رایگان", callback_data="adm_toggle:TRIAL_ENABLED:adm_cfg_sales")])
-    rows.append([InlineKeyboardButton(text="🔙 تنظیمات", callback_data="adm_settings_hub")])
     rows.append([InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
@@ -222,8 +177,6 @@ def roles_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [InlineKeyboardButton(text="➕ افزودن ادمین", callback_data="adm_role_add:admin")],
             [InlineKeyboardButton(text="➖ حذف ادمین", callback_data="adm_role_remove:admin")],
-            [InlineKeyboardButton(text="➕ افزودن نماینده", callback_data="adm_role_add:reseller")],
-            [InlineKeyboardButton(text="➖ حذف نماینده", callback_data="adm_role_remove:reseller")],
             [InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")],
         ]
     )
@@ -243,10 +196,7 @@ def user_detail_keyboard(telegram_id: int) -> InlineKeyboardMarkup:
                 InlineKeyboardButton(text="➕ افزایش موجودی", callback_data=f"adm_user_balance:{telegram_id}:plus"),
                 InlineKeyboardButton(text="➖ کاهش موجودی", callback_data=f"adm_user_balance:{telegram_id}:minus"),
             ],
-            [
-                InlineKeyboardButton(text="ادمین on/off", callback_data=f"adm_user_toggle_admin:{telegram_id}"),
-                InlineKeyboardButton(text="نماینده on/off", callback_data=f"adm_user_toggle_reseller:{telegram_id}"),
-            ],
+            [InlineKeyboardButton(text="ادمین on/off", callback_data=f"adm_user_toggle_admin:{telegram_id}")],
             [InlineKeyboardButton(text="📦 سرویس‌های کاربر", callback_data=f"adm_user_services:{telegram_id}")],
             [InlineKeyboardButton(text="🔙 کاربران", callback_data="adm_users")],
         ]
@@ -259,8 +209,8 @@ def inbounds_keyboard(inbounds) -> InlineKeyboardMarkup:
         mark = "⭐ " if inbound.is_default else ""
         active = "✅" if inbound.active else "⛔"
         rows.append([InlineKeyboardButton(text=f"{mark}{active} #{inbound.id} {inbound.title} / inbound={inbound.inbound_id}", callback_data=f"adm_inbound:{inbound.id}")])
-    rows.append([InlineKeyboardButton(text="➕ افزودن اینباند دستی", callback_data="adm_inbound_add")])
     rows.append([InlineKeyboardButton(text="📥 دریافت از پنل 3x-ui", callback_data="adm_pull_inbounds")])
+    rows.append([InlineKeyboardButton(text="➕ افزودن دستی", callback_data="adm_inbound_add")])
     rows.append([InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
@@ -270,9 +220,9 @@ def inbound_detail_keyboard(inbound_id: int) -> InlineKeyboardMarkup:
         inline_keyboard=[
             [InlineKeyboardButton(text="⭐ پیش‌فرض فروش کن", callback_data=f"adm_inbound_default:{inbound_id}")],
             [InlineKeyboardButton(text="فعال/غیرفعال", callback_data=f"adm_inbound_toggle:{inbound_id}")],
-            [InlineKeyboardButton(text="✏️ تغییر نام", callback_data=f"adm_inbound_edit:{inbound_id}:title")],
-            [InlineKeyboardButton(text="✏️ تغییر limit IP", callback_data=f"adm_inbound_edit:{inbound_id}:limit_ip")],
-            [InlineKeyboardButton(text="✏️ تغییر flow", callback_data=f"adm_inbound_edit:{inbound_id}:flow")],
+            [InlineKeyboardButton(text="✏️ نام", callback_data=f"adm_inbound_edit:{inbound_id}:title")],
+            [InlineKeyboardButton(text="✏️ limit IP", callback_data=f"adm_inbound_edit:{inbound_id}:limit_ip")],
+            [InlineKeyboardButton(text="✏️ flow", callback_data=f"adm_inbound_edit:{inbound_id}:flow")],
             [InlineKeyboardButton(text="🔙 اینباندها", callback_data="adm_inbounds")],
         ]
     )
@@ -304,11 +254,8 @@ def setup_step_keyboard(step: dict, index: int, total: int) -> InlineKeyboardMar
 def settings_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="⚙️ تنظیمات بخش‌بندی‌شده", callback_data="adm_settings_hub")],
-            [
-                InlineKeyboardButton(text="🔌 تست 3x-ui", callback_data="adm_test_xui"),
-                InlineKeyboardButton(text="💸 تست NOWPayments", callback_data="adm_test_now"),
-            ],
+            [InlineKeyboardButton(text="🔌 تست 3x-ui", callback_data="adm_test_xui")],
+            [InlineKeyboardButton(text="💸 تست NOWPayments", callback_data="adm_test_now")],
             [InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")],
         ]
     )
