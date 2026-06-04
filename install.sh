@@ -19,6 +19,7 @@ cd "$APP_DIR"
 
 if [[ ! -f .env ]]; then
   cp .env.example .env
+  chmod 600 .env || true
   echo "==> Created .env from .env.example"
 fi
 
@@ -57,10 +58,11 @@ WantedBy=multi-user.target
 SERVICE
 
 systemctl daemon-reload
-systemctl enable "$APP_NAME"
+systemctl enable --now "$APP_NAME"
 
 echo
-echo "Install complete."
-echo "1) Edit token if needed: nano $APP_DIR/.env"
-echo "2) Start bot: systemctl start $APP_NAME"
-echo "3) Logs: journalctl -u $APP_NAME -f"
+echo "Install complete. The bot service is enabled and started."
+echo "Edit config if needed: nano $APP_DIR/.env"
+echo "Restart after config changes: systemctl restart $APP_NAME"
+echo "Status: systemctl status $APP_NAME --no-pager"
+echo "Logs: journalctl -u $APP_NAME -f"
