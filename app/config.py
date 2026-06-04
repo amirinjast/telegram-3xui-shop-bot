@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     internal_api_key: str = Field("", alias="INTERNAL_API_KEY")
 
     public_base_url: str = Field("http://localhost:8080", alias="PUBLIC_BASE_URL")
-    app_host: str = Field("0.0.0.0", alias="APP_HOST")
+    app_host: str = Field("127.0.0.1", alias="APP_HOST")
     app_port: int = Field(8080, alias="APP_PORT")
     database_url: str = Field("sqlite+aiosqlite:///./shop.db", alias="DATABASE_URL")
 
@@ -44,6 +44,7 @@ class Settings(BaseSettings):
     xui_api_key: str = Field("", alias="XUI_API_KEY")
     xui_api_prefix: str = Field("/panel/api", alias="XUI_API_PREFIX")
     xui_subscription_base_url: str = Field("", alias="XUI_SUBSCRIPTION_BASE_URL")
+    xui_tls_verify: bool = Field(True, alias="XUI_TLS_VERIFY")
     xui_default_inbound_id: int = Field(1, alias="XUI_DEFAULT_INBOUND_ID")
     xui_default_limit_ip: int = Field(0, alias="XUI_DEFAULT_LIMIT_IP")
     xui_default_flow: str = Field("", alias="XUI_DEFAULT_FLOW")
