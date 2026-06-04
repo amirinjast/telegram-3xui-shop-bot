@@ -1,0 +1,33 @@
+# Local secrets and runtime files
+.env
+.env.*
+!.env.example
+
+# SQLite databases and generated runtime data
+*.db
+*.sqlite
+*.sqlite3
+shop.db
+shop.db-*
+data/
+backups/
+receipts/
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
