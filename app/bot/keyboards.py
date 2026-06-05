@@ -37,12 +37,14 @@ def plans_keyboard(plans) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def pay_methods_keyboard(order_id: int, *, allow_wallet: bool = True) -> InlineKeyboardMarkup:
+def pay_methods_keyboard(order_id: int, *, allow_wallet: bool = True, allow_nowpayments: bool = False, allow_manual: bool = True) -> InlineKeyboardMarkup:
     rows: list[list[InlineKeyboardButton]] = []
     if allow_wallet:
         rows.append([InlineKeyboardButton(text="💰 پرداخت از کیف پول", callback_data=f"pay_wallet:{order_id}")])
-    rows.append([InlineKeyboardButton(text="💸 پرداخت NOWPayments", callback_data=f"pay_now:{order_id}")])
-    rows.append([InlineKeyboardButton(text="💳 کارت‌به‌کارت", callback_data=f"pay_manual:{order_id}")])
+    if allow_manual:
+        rows.append([InlineKeyboardButton(text="💳 کارت‌به‌کارت", callback_data=f"pay_manual:{order_id}")])
+    if allow_nowpayments:
+        rows.append([InlineKeyboardButton(text="💸 پرداخت NOWPayments", callback_data=f"pay_now:{order_id}")])
     rows.append([InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
@@ -64,15 +66,15 @@ def topup_keyboard() -> InlineKeyboardMarkup:
     )
 
 
-def topup_method_keyboard(amount_toman: int) -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="💸 NOWPayments", callback_data=f"create_now:{amount_toman}")],
-            [InlineKeyboardButton(text="💳 کارت‌به‌کارت", callback_data=f"manual_topup:{amount_toman}")],
-            [InlineKeyboardButton(text="🔙 تغییر مبلغ", callback_data="menu:topup")],
-            [InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")],
-        ]
-    )
+def topup_method_keyboard(amount_toman: int, *, allow_nowpayments: bool = False, allow_manual: bool = True) -> InlineKeyboardMarkup:
+    rows: list[list[InlineKeyboardButton]] = []
+    if allow_manual:
+        rows.append([InlineKeyboardButton(text="💳 کارت‌به‌کارت", callback_data=f"manual_topup:{amount_toman}")])
+    if allow_nowpayments:
+        rows.append([InlineKeyboardButton(text="💸 NOWPayments", callback_data=f"create_now:{amount_toman}")])
+    rows.append([InlineKeyboardButton(text="🔙 تغییر مبلغ", callback_data="menu:topup")])
+    rows.append([InlineKeyboardButton(text="🏠 منوی اصلی", callback_data="menu:home")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def admin_receipt_keyboard(receipt_id: int) -> InlineKeyboardMarkup:
@@ -159,7 +161,7 @@ def config_section_keyboard(section: str, items: list[tuple[str, str]], *, tests
     if section == "xui":
         rows.append([InlineKeyboardButton(text="🔌 تست و دریافت اینباند", callback_data="adm_pull_inbounds")])
     if section == "payment":
-        rows.append([InlineKeyboardButton(text="💸 تست NOWPayments", callback_data="adm_test_now")])
+        rows.append([InlineKeyboardButton(text="روشن/خاموش کارت", callback_data="adm_toggle:MANUAL_PAYMENT_ENABLED:adm_cfg_payment")])
     rows.append([InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
@@ -255,7 +257,6 @@ def settings_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="🔌 تست 3x-ui", callback_data="adm_test_xui")],
-            [InlineKeyboardButton(text="💸 تست NOWPayments", callback_data="adm_test_now")],
             [InlineKeyboardButton(text="🛠 پنل مدیریت", callback_data="menu:admin")],
         ]
     )
