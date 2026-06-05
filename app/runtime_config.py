@@ -112,7 +112,7 @@ def ensure_runtime_defaults(path: str | None = None) -> dict[str, Any]:
         "LOCAL_CURRENCY_UNIT": "toman",
         "USD_RATE_TOMAN": 150000,
         "MIN_TOPUP_TOMAN": 50000,
-        "NOWPAYMENTS_ENABLED": True,
+        "NOWPAYMENTS_ENABLED": False,
         "NOWPAYMENTS_BASE_URL": "https://api.nowpayments.io/v1",
         "NOWPAYMENTS_PRICE_CURRENCY": "usd",
         "NOWPAYMENTS_SUCCESS_STATUSES": "finished,confirmed",
